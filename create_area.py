@@ -1,5 +1,5 @@
 from random import randint
-from units import *
+
 
 def create_empty_area():
     return [['0' for j in range(10)] for i in range(10)]
@@ -9,7 +9,7 @@ def choose_square(row, col):
     return randint(0, row - 1), randint(0, col - 1)
 
 
-def check_existence(curr_x, curr_y, max_x, max_y):
+def check_existence(curr_x, curr_y, max_x=10, max_y=10):
     return 0 <= curr_x < max_x and 0 <= curr_y < max_y
 
 
@@ -51,34 +51,3 @@ def implement_changes(area, boat, value='1'):
     for square in boat:
         x, y = square
         area[x][y] = value
-
-
-def show_area(area):
-    for line in area:
-        print(line)
-    print()
-
-
-def constructor(squares, area):
-    while True:
-        boat = add_boat(squares, area)
-        if boat:
-            break
-    implement_changes(area, boat)
-    reserve_squares(boat)
-    for i in reserve_squares(boat):
-        implement_changes(area, i, 'x')
-
-
-def generate_filled_area():
-    area = create_empty_area()
-    boats = [FourDeck(), ThreeDeck(), DoubleDeck(), SingleDeck()]
-    for boat in boats:
-        for count in range(boat.count):
-            constructor(boat.length, area)
-    return area
-
-
-if __name__ == '__main__':
-    for i in generate_filled_area():
-        print(i)
