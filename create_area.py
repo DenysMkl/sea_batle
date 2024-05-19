@@ -26,7 +26,7 @@ def add_boat(boat_size, area):
         new_x, new_y = x, y
         for i in range(boat_size):
             step_x, step_y = side
-            if not check_existence(new_x, new_y, len(area), len(area[0])) or \
+            if not check_existence(new_x, new_y) or \
                     check_reservation(area, new_x, new_y):
                 break
             add_square.add((new_x, new_y))

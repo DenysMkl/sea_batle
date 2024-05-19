@@ -1,3 +1,4 @@
+import time
 from random import choice
 from string import ascii_lowercase as alp
 
@@ -11,6 +12,7 @@ class Bot:
         self.hidden_area = create_empty_area()
         self.received_shoots = set()
         self.boats = self.create_boats()
+        self.previous_shoot = None
         self.fill_area()
 
     def fill_area(self):
@@ -23,19 +25,33 @@ class Bot:
                 DoubleDeck(), DoubleDeck(), SingleDeck(), SingleDeck(),
                 SingleDeck(), SingleDeck()]
 
-    # def make_shoot(self):
-    #     letter = choice(alp[:10])
-    #     number = choice([str(i) for i in range(1, 11)])
-    #     self.previous_shoot = letter + number
+    def make_shoot(self, player):
+        letter = choice(alp[:10])
+        number = choice([str(i) for i in range(1, 11)])
+        self.previous_shoot = letter + number
+        player.process_shot_result(self.previous_shoot)
+
+    def generate_next_shoots(self, player):
+        previous_x, previous_y = self.deserialize_shoot(self.previous_shoot)
+        sides = [(1, 0), (0, -1), (0, 1), (-1, 0)]
+        for x, y in sides:
+            print(check_existence(previous_x+x, previous_y+y))
 
     def valid_shoot(self, x_coord, y_coord):
         return (x_coord, y_coord) in self.received_shoots or \
                self.hidden_area[x_coord][y_coord] == 'x'
 
     @staticmethod
-    def deserialize_shoot(coord):
-        letter_dict = {letter: index for index, letter in enumerate(alp[:10])}
-        number_dict = {f'{i + 1}': i for i in range(10)}
+    def get_letter_dict():
+        return {letter: index for index, letter in enumerate(alp[:10])}
+
+    @staticmethod
+    def get_number_dict():
+        return {f'{i + 1}': i for i in range(10)}
+
+    def deserialize_shoot(self, coord):
+        letter_dict = self.get_letter_dict()
+        number_dict = self.get_number_dict()
         try:
             y, x = letter_dict.get(coord[0]), number_dict.get(coord[1:])
         except TypeError:
@@ -68,12 +84,15 @@ class Bot:
             print(i, j, sep='\t\t')
 
 
-def check_boats(area):
-    return any('1' in line for line in area)
+b1 = Bot()
+b2 = Bot()
+b2.show_maps()
+b1.make_shoot(b2)
+print(b1.previous_shoot)
+b1.generate_next_shoots(b2)
+# b2.show_maps()
+# while len(b1.boats):
+    # shoot = input('enter square: ').strip()
+    # b1.process_shot_result(shoot)
 
-
-b = Bot()
-b.show_maps()
-while check_boats(b.area):
-    shoot = input('enter square: ').strip()
-    b.process_shot_result(shoot)
+    # time.sleep(5)

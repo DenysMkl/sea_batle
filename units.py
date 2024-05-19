@@ -44,6 +44,5 @@ class SingleDeck(Boat):
 if __name__ == '__main__':
     b = FourDeck()
     u_area = create_empty_area()
-    print(b.place_boat(u_area))
     for i in u_area:
         print(i)
