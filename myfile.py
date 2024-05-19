@@ -32,10 +32,17 @@ class Bot:
         player.process_shot_result(self.previous_shoot)
 
     def generate_next_shoots(self, player):
-        previous_x, previous_y = self.deserialize_shoot(self.previous_shoot)
-        sides = [(1, 0), (0, -1), (0, 1), (-1, 0)]
-        for x, y in sides:
-            print(check_existence(previous_x+x, previous_y+y))
+        sides = [(1, 0), (-1, 0), (0, -1), (0, 1)]
+        curr_letter, curr_numb = self.previous_shoot[0], self.previous_shoot[1:]
+        serialized_x, serialized_y = self.deserialize_shoot(self.previous_shoot)
+        filter_sides = [(x, y) for x, y in sides if check_existence(serialized_x + x, serialized_y + y)]
+
+        for x_side, y_side in filter_sides:
+            next_letter = alp[self.get_letter_dict().get(curr_letter) + y_side]
+            next_numb = int(curr_numb) + x_side
+            print(f'{curr_letter}{curr_numb} -> {next_letter}{next_numb}')
+
+    def next_shoot(self, direction): pass
 
     def valid_shoot(self, x_coord, y_coord):
         return (x_coord, y_coord) in self.received_shoots or \
@@ -76,7 +83,6 @@ class Bot:
             if all(map(lambda x: x in self.received_shoots, boat.boat_coords)):
                 boat.mark_fields(self.hidden_area)
                 self.boats.remove(boat)
-                print(self.boats)
         self.show_maps()
 
     def show_maps(self):
@@ -84,15 +90,20 @@ class Bot:
             print(i, j, sep='\t\t')
 
 
-b1 = Bot()
-b2 = Bot()
-b2.show_maps()
-b1.make_shoot(b2)
-print(b1.previous_shoot)
-b1.generate_next_shoots(b2)
+# b1 = Bot()
+# b2 = Bot()
+# b2.show_maps()
+# b1.make_shoot(b2)
+# b1.generate_next_shoots(b2)
+
 # b2.show_maps()
 # while len(b1.boats):
     # shoot = input('enter square: ').strip()
     # b1.process_shot_result(shoot)
 
     # time.sleep(5)
+def factor(n):
+    return n * factor(n-1) if n >= 1 else 1
+
+
+print(factor(5))
