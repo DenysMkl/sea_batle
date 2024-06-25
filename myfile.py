@@ -43,9 +43,10 @@ class Bot:
         sides = [(1, 0), (-1, 0), (0, -1), (0, 1)]
         curr_letter, curr_numb = self.previous_shoot[0], self.previous_shoot[1:]
         serialized_x, serialized_y = self.deserialize_shoot(self.previous_shoot)
-        filter_sides = [(x, y) for x, y in sides if check_existence(serialized_x + x, serialized_y + y)]
-
+        filter_sides = [(x, y) for x, y in sides if check_existence(serialized_x + x,
+                                                                    serialized_y + y)]
         if not player.check_shot(self.previous_shoot):
+            print(f'miss {self.previous_shoot}')
             return
         for x_side, y_side in filter_sides:
             counter = 1
@@ -88,13 +89,13 @@ class Bot:
         return self.area[x][y] == '1'
 
     def process_shot_result(self, shot):
-
         if self.deserialize_shoot(shot) is None:
             return
         enemy_x, enemy_y = self.deserialize_shoot(shot)
 
         if self.valid_shoot(enemy_x, enemy_y):
             return
+
         self.received_shoots.add((enemy_x, enemy_y))
         self.hidden_area[enemy_x][enemy_y] = '+' if \
             self.check_shot(shot) else 'x'
@@ -112,7 +113,12 @@ class Bot:
 b1 = Bot()
 b2 = Bot()
 
-while len(b2.boats):
-    b1.make_shoot(b2)
-    b1.generate_next_shoots(b2)
-    b2.show_maps()
+# while len(b2.boats):
+b1.make_shoot(b2)
+b2.show_maps()
+print(b2.received_shoots)
+print(b1.all_shots)
+# b1.generate_next_shoots(b2)
+# print(b1.all_shots)
+# print(b2.received_shoots)
+# b2.show_maps()
