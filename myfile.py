@@ -110,15 +110,16 @@ class Bot:
         print(end='\n\n\n\n')
 
 
-b1 = Bot()
-b2 = Bot()
+if __name__ == "__main__":
+    b1 = Bot()
+    b2 = Bot()
 
-# while len(b2.boats):
-b1.make_shoot(b2)
-b2.show_maps()
-print(b2.received_shoots)
-print(b1.all_shots)
-# b1.generate_next_shoots(b2)
-# print(b1.all_shots)
-# print(b2.received_shoots)
-# b2.show_maps()
+    # while len(b2.boats):
+    b1.make_shoot(b2)
+    b2.show_maps()
+    print(b2.received_shoots)
+    print(b1.all_shots)
+    # b1.generate_next_shoots(b2)
+    # print(b1.all_shots)
+    # print(b2.received_shoots)
+    # b2.show_maps()
